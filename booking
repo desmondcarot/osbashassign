@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Check if staff file exists
+if [ ! -f "staff.txt" ]; then
+  echo "Error: staff.txt file not found."
+  exit 1
+fi
+
+# Get staff ID from user
+read -p "Enter your staff ID: " staff_id
+
+# Search staff file for matching staff ID
+staff_info=$(grep "^$staff_id:" staff.txt)
+
+# Check if staff ID is found
+if [ -n "$staff_info" ]; then
+  # Extract staff name from staff info
+  staff_name=$(echo "$staff_info" | cut -d: -f2)
+
+  # Display staff name and prompt for booking
+  read -p "Staff $staff_name found. Do you want to continue to booking? (y/n) " choice
+
+  # Check user's choice
+  case $choice in
+    y|Y)
+      echo "Redirecting to booking screen..."
+      # Add code to redirect to booking screen
+      ;;
+    n|N)
+      echo "Exiting staff validation screen."
+      exit 0
+      ;;
+    *)
+      echo "Invalid choice. Exiting staff validation screen."
+      exit 1
+      ;;
+  esac
+else
+  # Staff ID not found
+  echo "Staff ID not found in record."
+  
+  # Ask user if they want to search again
+  while true; do
+    read -p "Do you want to search again? (y/n) " choice
+
+    # Check user's choice
+    case $choice in
+      y|Y)
+        # Search again
+        read -p "Enter your staff ID: " staff_id
+        staff_info=$(grep "^$staff_id:" staff.txt)
+
+        # Check if staff ID is found
+        if [ -n "$staff_info" ]; then
+          staff_name=$(echo "$staff_info" | cut -d: -f2)
+          read -p "Staff $staff_name found. Do you want to continue to booking? (y/n) " choice
+          case $choice in
+            y|Y)
+              echo "Redirecting to booking screen..."
+              # Add code to redirect to booking screen
+              ;;
+            n|N)
+              echo "Exiting staff validation screen."
+              exit 0
+              ;;
+            *)
+              echo "Invalid choice. Exiting staff validation screen."
+              exit 1
+              ;;
+          esac
+        else
+          # Staff ID still not found
+          echo "Staff ID not found in record. Please try again."
+        fi
+        ;;
+      n|N)
+        echo "Exiting staff validation screen."
+        exit 0
+        ;;
+      *)
+        echo "Invalid choice. Please choose again."
+        ;;
+    esac
+  done
+fi

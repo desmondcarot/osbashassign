@@ -1,0 +1,3 @@
+SG:001:Classroom:20:Available
+SG:002:Classroom:20:Available
+SG:003:Classroom:20:Booked
